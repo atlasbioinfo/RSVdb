@@ -1,6 +1,6 @@
 # RSVdb: A comprehensive database of *in vivo* mRNA structures
 
-![figure1]("./taolab/static/rsvdb/img/manual/2.png")
+![figure1]("./1.png")
 
 RSVdb focuses on the research and experimental data related to the mRNA structure in vivo. It includes all the studies of the in vivo mRNA structure labeled by DMS reagent since the first proposed DMS-profiling method in 2014 (Rouskin et al. 2014; Ding et al. 2014). Our database including 622,429 RNAs from 178 samples of 10 studies in 8 species, displays the statistical presentation of mapping data, even predict and visualize mRNA structure in silico and in vivo. The project is supported by the National Natural Science Foundation of China (Grant 31771474). Servers and network services are provided by the Network & Education Technology Center of NWAFU.
 
@@ -8,7 +8,7 @@ Main site please visit https://taolab.nwsuaf.edu.cn/rsvdb/
 
 The repository contains the source code for the front and back ends of RSVdb. The structure of the website is: 
 
-![figure2]("./taolab/static/rsvdb/img/manual/3.png")
+![figure2]("./2.png")
 
 
 ## Installation
