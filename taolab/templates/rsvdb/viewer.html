@@ -1,0 +1,264 @@
+{% extends 'rsvdb/base.html' %}
+
+{% block extendFile %}
+<link href="{{ url_for('static',filename='rsvdb/css/bootstrap-table.min.css')}}" rel="stylesheet">
+<script src="{{ url_for('static',filename='rsvdb/js/bootstrap-table.min.js')}}" type="text/javascript"></script>
+<script src="{{ url_for('static',filename='rsvdb/js/bootstrap-table-export.min.js')}}" type="text/javascript"></script>
+<script src="{{ url_for('static',filename='rsvdb/js/tableExport.min.js')}}"></script>
+<script src="{{ url_for('static',filename='rsvdb/js/echarts.min.js')}}"></script>
+<script src="{{ url_for('static',filename='rsvdb/js/bootstrap3-typeahead.min.js')}}" type="text/javascript"></script>
+<script src="{{ url_for('static',filename='rsvdb/js/viewer.js')}}"></script>
+<script src="{{ url_for('static',filename='rsvdb/js/fornac.js')}}"></script>
+<link href="{{ url_for('static',filename='rsvdb/css/fornac.css')}}" rel="stylesheet">
+<script src="{{ url_for('static',filename='rsvdb/js/bootstrap-select.min.js')}}"></script>
+<link href="{{ url_for('static',filename='rsvdb/css/bootstrap-select.min.css')}}" rel="stylesheet">
+<script src="{{ url_for('static',filename='rsvdb/js/saveSvgAsPng.js')}}"></script>
+{% endblock %}
+
+{% block struButt %}
+<li class="active"><a href="{{url_for('rsvdb.showStruViewer')}}">Viewer</a></li>
+{% endblock %}
+
+{% block content %}
+<div class="jumbotron homeIntroShow subintroshow" id="jumbotron">
+        <div class="sublogo" id="zhezhao">
+          <h1><img class='mainlogo' src="{{url_for('static',filename='rsvdb/img/viewer.png')}}"><i>In vivo</i> RNA Structure Viewer</h1>
+          <p class="subp">Select the appropriate research, search for the transcripts you are interested in and predict the <i>in vivo</i> RNA structure of subsequence.</p>
+        </div>
+      </div>
+<div class="row allthings">
+    <div class="alert alert-danger alert-dismissible" role="alert" 
+        id="warnnogenediv" style="display: none">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                aria-hidden="true">&times;</span></button>
+        <strong>Oh!</strong> <span id="warnTextgene"></span> Please re-select the study and re-search the transcripts ID or gene name.
+    </div>
+    <div class="btn-group-vertical" role="group">
+        <button class="btn btn-default" disabled="disabled">Species</button>
+        {% for sp in spes %}
+        {% if sp==spin %}
+        <button type="button" class="active btn btn-default spbutt">{{sp}}</button>
+        {% else %}
+        <button type="button" class="btn btn-default spbutt">{{sp}}</button>
+        {% endif %}
+        {% endfor %}
+    </div>
+
+
+    <div class="btn-group-vertical" role="group" id="geocontent">
+    </div>
+
+    <div class="infotabledetail container col-md-9">
+        <div class="panel panel-success" style="text-align:center">
+            <div class="panel-heading"><a data-toggle="tooltip" data-placement="right" title="Search bar for a transcripts or gene you’re interested in of the study.">Search Scope</a></div>
+            <table class="table table-bordered table-hover">
+                <tr>
+                    <td class="tableLab"><a data-toggle="tooltip" data-placement="right" title="GEO link of the study">Study</a></td>
+                    <td id="sstudyname"></td>
+                    <td class="tableLab"><a data-toggle="tooltip" data-placement="right" title="Species involved in the study you selected.">Species:</a></td>
+                    <td id="sspename"></td>
+                    <td class="tableLab"><a data-toggle="tooltip" data-placement="right" title="PubMed Unique Identifier">PMID:</a></td>
+                    <td id="spubmid"></td>
+                </tr>
+                <tr>
+                    <td class="tableLab"><a data-toggle="tooltip" data-placement="right" title="Name of the study">Title:</a></td>
+                    <td colspan="5" id="stitle"></td>
+                </tr>
+                <tr>
+                    <td colspan="6">
+                        <div class="searchGenediv">
+                            <input id="searchGene" class="typeahead" type="text" placeholder="Search Transcript ID or gene name"
+                            autocomplete="off" spellcheck="false" data-provide="typeahead">
+                        </div>
+                        <div id="inputgeneexample"></div>
+                    </td>
+                </tr>
+
+            </table>
+
+
+
+        </div>
+        <div class="panel panel-success" style="text-align:center">
+            <div class="panel-heading"  >
+                <a data-toggle="tooltip" data-placement="right" title="Basic information of the transcript or gene you searched.">Gene Info</a>
+            </div>
+            <table class="table table-bordered table-hover" id="geneinfotable">
+                <tr>
+                    <td class="tableLab"><a>Transcript ID</a></td>
+                    <td id="geneid"></td>
+                    <td class="tableLab"><a>Gene name</a></td>
+                    <td  id="genename"></td>
+                    <td class="tableLab"><a data-toggle="tooltip" data-placement="right" title="The gene you searched lies in this chromosome">Chromosome</a></td>
+                    <td id="chromosome"></td>
+                </tr>
+                <tr>
+                    <td class="tableLab"><a data-toggle="tooltip" data-placement="right" title="GC content of the gene you searched.">GC content</a></td>
+                    <td id="gc"></td>
+                    <td class="tableLab"><a data-toggle="tooltip" data-placement="right" title="Gene type of the gene you searched.">Gene type</a></td>
+                    <td colspan="3" id="genetype"></td>
+                </tr>
+                <tr>
+                    <td class="tableLab"><a data-toggle="tooltip" data-placement="right" title="Basic description of the gene you searched">Description</a></td>
+                    <td colspan="5" id="description"></td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="tableLab"><a data-toggle="tooltip" data-placement="right" title="Sample label list of the gene you searched">Sample</a></td>
+                    <td colspan="2" class="tableLab"><a data-toggle="tooltip" data-placement="right" title="Average DMS signal of the gene.">DMS signal</a></td>
+                    <td colspan="2" class="tableLab"><a data-toggle="tooltip" data-placement="right" 
+                        title="Average Gini coefficient of the gene(The gini coefficient is calculated by sliding window with 50nt window size and 50nt step size)">Gini coefficient</a></td>
+                </tr>
+                <tbody id="rpkmtable">
+
+                </tbody>
+            </table>
+        </div>
+        <div class="panel panel-success" style="text-align:center">
+            <div class="panel-heading"><a  data-toggle="tooltip" data-placement="bottom" title="Visualization of RNA structure. We predict the RNA structure both in silico and in experiment by Fold of the RNAstructure software package and the visualization of ViennaRNA's fornac.">RNA structure viewer</a></div>
+            <div id="dmsplotpanel" style="width:100%;position: relative;height:400px;">
+                <div id="dmsplot" style="width: 100%;height:100%;"></div>
+            </div>
+            <span id="selectregioninfo"></span><span> <a data-toggle="tooltip" data-placement="bottom" title='The region shown in DMS signal figure is the sequence to be calculated. To facilitate the selection of specific regions, we recommend using the "Zoom" tool next to the figure to select the regions where you wish to predict RNA structure.'>How to select?</a></span>
+
+        
+        <div class="panel panel-success" style="text-align:center" id="gernastruhead">
+            <div class="panel-heading">
+                <h5>Sample:</h5>
+                <div id="selgernastru" class="titleselects"></div>
+                <h5 class="rightselect" id="submitgernastrutext">Submit: <button class="btn btn-warning" id="butgernastru"
+                        onclick=subSeqForStru()>Generate RNA
+                        structure</button></h5>
+            </div>
+            <table class="table table-bordered table-hover" id="struinfotable">
+                <tr>
+                    <td><a data-toggle="tooltip" data-placement="right" title="Transcript ID">Gene</a></td>
+                    <td id="subgeneid"></td>
+                    <td><a data-toggle="tooltip" data-placement="right" title="Transcript length">Length</a></td>
+                    <td id="subgenelen"></td>
+                    <td><a data-toggle="tooltip" data-placement="right" title="The selected length of RNA structure region.">Selected</a></td>
+                    <td id="subsellen"></td>
+                </tr>
+
+                <tr>
+                    <td class="tableLab"><a data-toggle="tooltip" data-placement="right" title="The sequence you select.">Sequence</a></td>
+                    <td id="subseq" colspan="5"></td>
+                </tr>
+                <tr>
+                    <td class="tableLab" colspan="3"><a  data-toggle="tooltip" data-placement="bottom" title="Visualization of RNA structure in silico. The command is 'Fold seq.fa out.ct'">RNA structure <i>in silico</i></a></td>
+                    <td class="tableLab" colspan="3" id='invivoname'><a data-toggle="tooltip" data-placement="bottom" title="Visualization of RNA structure in experiment. The command is 'Fold seq.fa out.ct -dms dmsFile'" >RNA structure <i>in the experiment</i></a></td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="strushowtd" style="width: 50%">
+                        <div class='col-md-6 structureinvitro' id="structureinvitro" style="height: 500px;width:100%"></div>
+                    </td>
+                    <td colspan="3" class="strushowtd" style="width: 50%">
+                        <div class='col-md-6 structureinvivo' id="structureinvivo" style="height: 500px;width: 100%"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tableLab"><a data-toggle="tooltip" data-placement="bottom" title="Minimum free energy of the structure">MFE</a></td>
+                    <td colspan="2" id='vitromfe'></td>
+                    <td class="tableLab"><a data-toggle="tooltip" data-placement="bottom" title="Minimum free energy of the structure">MFE</a></td>
+                    <td colspan="2" id='vivomfe'></td>
+                </tr>
+                <tr>
+                    <td class="tableLab"><a data-toggle="tooltip" data-placement="bottom" title="Display the structure with dot and bracket.">Pair</a></td>
+                    <td colspan="2" id='vitrodot'></td>
+                    <td class="tableLab"><a data-toggle="tooltip" data-placement="bottom" title="Display the structure with dot and bracket.">Pair</a></td>
+                    <td colspan="2" id='vivodot'></td>
+                </tr>
+                <tr>
+                    <td colspan="3"><button class="btn btn-primary" onclick='downloadPNG("structureinvitro","inSilico")'>Export RNA structure image</button></td>
+                    <td colspan="3"><button class="btn btn-primary" onclick='downloadPNG("structureinvivo","inVivo")'>Export RNA structure image</button></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="loadingmodal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="loading">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <h4 id="modaltitletext">Searching gene:</h4>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+<script>
+    var myChart = echarts.init(document.getElementById('dmsplot'));
+    myChart.on('datazoom', function (e) {
+        let tmp = myChart.getOption();
+        $("#selectregioninfo").text("Selected " + ((tmp.dataZoom[0].startValue + 1)) + " - " + ((tmp.dataZoom[0].endValue + 1)) + " region of this transcript");
+    });
+    $(".spbutt").bind("click", function () {
+        $(".spbutt").removeClass("active");
+        showgeo($(this).text());
+        $(this).addClass("active");
+    });
+
+    $("#searchGene").typeahead({
+        source: function (query, process) {
+            let geo = $("#sstudyname").text();
+            let spe = $("#sspename").text();
+            $.post("{{url_for('rsvdb.showStruViewer')}}", { "med": "searchGene", "geo": geo, "spe": spe, "label": query }, function (data) {
+                return process(data.ajlist);
+            });
+        },
+        afterSelect: function (item) {
+            let geo = $("#sstudyname").text();
+            getDMSdata(geo, item);
+        },
+        fitToElement:true,
+    });
+
+    $("#searchGene").keypress(function (e) {
+        if (e.which == 13) {
+            let exp = $("#searchGene").val();
+            let geo = $("#sstudyname").text();
+            if (exp) {
+                getDMSdata(geo, exp);
+            }
+        }
+    });
+
+
+    $('#loadingmodal').on('show.bs.modal', centerModals());
+
+    $('#loadingmodal').modal({
+        backdrop: 'static',
+        keyboard: false,
+        show: false
+    });
+
+    window.onload = function () {
+        $('.spbutt:contains("{{spe}}")').addClass("active");
+        showgeo("{{spe}}","{{geo}}");
+        $("#gernastruhead").hide();
+        $("#warnnogenediv").hide();
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        });
+    
+        let gname="{{gene}}";
+        let geo="{{geo}}";
+        if (gname){
+            if (geo){
+                getDMSdata(geo, gname);
+            }
+        }
+    }
+
+</script>
+{% endblock %}

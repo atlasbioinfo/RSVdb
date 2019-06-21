@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <link href="{{ url_for('static',filename='rsvdb/css/bootstrap.min.css')}}" rel="stylesheet">
+    <script src="{{ url_for('static',filename='rsvdb/js/jquery-3.3.1.min.js')}}" type="text/javascript"></script>
+    <script src="{{ url_for('static',filename='rsvdb/js/bootstrap.min.js')}}" type="text/javascript"></script>
+    <link rel="icon" href="{{url_for('static',filename='rsvdb/img/mainlogosm.png')}}" type="images/x-ico" />
+</head>
+<style>
+.browserimg{
+    width: 80px;
+}
+.browsetext{
+    font-size: 50px;
+    font-weight: bold;
+    color:#f2eada;
+}
+</style>
+<body style="text-align: center;font-family: 'Times New Roman', Times, serif;background-color: #494e8f;color: white">
+    <h1 style="margin-top:100px;font-weight:bold;">Sorry, your browser doesn't support HTML5</h1>
+    <img src="{{url_for('static',filename='rsvdb/img/html5.jpg')}}">
+    <h3 style="font-weight:bold;color: #f391a9;" >Most of the function of RSVdb provided require HTML5 support, <br />so switch browsers that support HTML5.</h3>
+    <h2 style="margin-top: 50px;margin-bottom:30px">Here are the most popular browsers that support HTML5:</h2>
+    <div>
+        <a class="browsetext" href="https://support.microsoft.com/zh-cn/help/17621/internet-explorer-downloads"><img class="browserimg" src="{{url_for('static',filename='rsvdb/img/ie.png')}}">IE>=11</a>
+        <a class="browsetext" href="https://www.firefox.com/"><img class="browserimg" src="{{url_for('static',filename='rsvdb/img/firefox.png')}}">Firefox</a>
+        <a class="browsetext" href="https://www.google.com/chrome/"><img class="browserimg" src="{{url_for('static',filename='rsvdb/img/chrome.png')}}">Chrome</a>
+        <a class="browsetext" href="https://www.apple.com/cn/safari/"><img class="browserimg" src="{{url_for('static',filename='rsvdb/img/safari.png')}}">Safari</a>
+    </div>
+
+</body>
+
+</html>

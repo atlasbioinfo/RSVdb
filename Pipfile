@@ -1,0 +1,17 @@
+[[source]]
+name = "pypi"
+url="https://pypi.tuna.tsinghua.edu.cn/simple/"
+verify_ssl = true
+
+[dev-packages]
+pylint = "*"
+autopep8 = "*"
+
+[packages]
+flask-blueprint = "*"
+flask = "*"
+python-dotenv = "*"
+flask-sqlalchemy = "*"
+
+[requires]
+python_version = "3.7"

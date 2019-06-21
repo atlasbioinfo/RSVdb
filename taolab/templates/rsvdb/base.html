@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <link href="{{ url_for('static',filename='rsvdb/css/bootstrap.min.css')}}" rel="stylesheet">
+    <script src="{{ url_for('static',filename='rsvdb/js/jquery-3.3.1.min.js')}}" type="text/javascript"></script>
+    <script src="{{ url_for('static',filename='rsvdb/js/bootstrap.min.js')}}" type="text/javascript"></script>
+    <link href="{{ url_for('static',filename='rsvdb/css/style.css')}}" rel="stylesheet">
+    <link rel="icon" href="{{url_for('static',filename='rsvdb/img/mainlogosm.png')}}" type="images/x-ico" />
+    {% block title %}
+    <title>RNA structrue database</title>
+    {% endblock %}
+    {% block extendFile %}{% endblock %}
+
+</head>
+
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                    <a id="smlogo" class="navbar-brand" href="https://taolab.nwsuaf.edu.cn/rsvdb/index">
+                        <img id='mainlogosize' alt="Brand" src="{{url_for('static',filename='rsvdb/img/mainlogosm.png')}}" style="float:left"><span style="float: left">RSVdb</span></a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    {% block dataButt %}
+                    <li><a href="{{url_for('rsvdb.showDetail')}}">Browse</a></li>
+                    {% endblock %}
+                    {% block struButt %}
+                    <li><a href="{{url_for('rsvdb.showStruViewer')}}">Viewer</a></li>
+                    {% endblock %}
+
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+
+    {% block content %}
+    {% endblock %}
+    
+    <canvas id="testhtml5canvas"></canvas>
+    <script>
+    if (!document.getElementById("testhtml5canvas").getContext){
+        window.location.href="{{url_for('rsvdb.showSupport')}}";   
+   } </script>
+</body>
+<footer>
+        <span style="font-size: 120%">RSVdb <a>&copy</a>2019 <a href="http://taolab.nwsuaf.edu.cn">Shiheng Tao Lab</a>, <a href="http://nwsuaf.edu.cn">Northwest A&F University</a> </span>
+    </footer>
+</html>
