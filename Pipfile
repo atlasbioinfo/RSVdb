@@ -12,6 +12,7 @@ flask-blueprint = "*"
 flask = "*"
 python-dotenv = "*"
 flask-sqlalchemy = "*"
+werkzeug = "*"
 
 [requires]
 python_version = "3.7"
