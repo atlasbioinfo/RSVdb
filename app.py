@@ -714,7 +714,7 @@ def showDetail(spin):
             ginihist=getGiniHist(GiniHist,request.values['label'],request.values['thre'])
             return (jsonify(ginihist))
         else:
-            return "Request-values validation failed"
+            return "Request-values validation failed in Browse"
     elif (request.method == 'GET'):
         geo=request.args.get("geo")
         return render_template('rsvdb/browse.html', spin=spin,geo=geo)
@@ -743,7 +743,7 @@ def showStruViewer():
             stru=getStructure(request.values['label'],request.values['dms'],request.values['thre'],request.values['adj'])
             return jsonify(stru)
         else:
-            return "You kidding again..."
+            return "Request-values validation failed in Viewer"
     elif (request.method == 'GET'):
         spe=request.args.get("spe")
         if (spe):
