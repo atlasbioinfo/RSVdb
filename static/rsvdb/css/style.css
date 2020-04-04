@@ -1,0 +1,703 @@
+.affix-top {
+    position: relative;
+}
+
+.affix {
+    top: 80px;
+}
+
+.affix,
+.affix-bottom {
+    width: 255px;
+}
+
+.affix-bottom {
+    position: absolute;
+}
+
+.homeIntroShow {
+    text-align: center;
+}
+
+.thumbnail {
+    margin-left: 10px;
+    text-align: center;
+}
+
+.thumbContent {
+    margin-top: 10px;
+}
+
+.thumbAll {
+    width: 10%;
+    float: inline-start;
+    margin-left: 10px;
+}
+
+.thumbTitle {
+    font-size: 120%;
+}
+
+#testPan {
+    margin-top: 150px;
+    width: 130px;
+}
+
+.btn-group-vertical {
+    /*   margin-top: 100px; */
+    width: 100px;
+    margin-left: 10px;
+    float: left;
+    display: inline-block;
+    vertical-align: top;
+}
+
+#showTable {
+    /*   width:  600px; */
+    /*   text-align: center; */
+    /*   margin-left: 10px;   */
+    display: inline-block;
+    vertical-align: top;
+}
+
+footer {
+    position: fixed;
+    text-align: center;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 30px;
+    background-color: #eee;
+    z-index: 9999;
+}
+
+.allthings {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.infotabledetail {
+    overflow: hidden;
+    display: block;
+    /* border-left: 2px dashed #2dbf2f;
+    border-right: 2px dashed #1c8ef1; */
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+table {
+    table-layout: fixed;
+    word-break: break-all;
+    word-wrap: break-all;
+}
+
+.infostatis {
+    display: block;
+    margin-left: -10px;
+}
+
+#struInfoTableTitle {
+    font-weight: bold;
+    font-size: 17px;
+    color: rgba(65, 105, 225, 1);
+}
+
+#shuru {
+    border: 2px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    border-radius: 8px;
+    width: 570px;
+    height: 40px;
+    font-size: 16px;
+    line-height: 26px;
+    outline: none;
+    margin-top: 20px;
+    margin-bottom: -10px;
+    padding-left: 12px;
+}
+
+#searchGene {
+    border: 2px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    border-radius: 8px;
+    width: 50%;
+    height: 40px;
+    font-size: 16px;
+    line-height: 26px;
+    outline: none;
+    margin-bottom: -10px;
+    padding-left: 12px;
+}
+
+.typeahead.dropdown-menu {
+    font-size: 16px;
+    /* width: 87%; */
+    margin: 12px 0;
+    padding: 8px 0;
+    background-color: #fff;
+    text-align: left;
+    padding-top: -10px;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+    -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+}
+
+.searchdroptitle {
+    margin: 0 20px 5px 20px;
+    padding: 3px 0;
+    border-bottom: 1px solid #ccc;
+    font-size: 20px;
+}
+
+.tt-hint {
+    border: 2px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    border-radius: 8px;
+    width: 370px;
+    height: 40px;
+    font-size: 16px;
+    line-height: 26px;
+    outline: none;
+    margin-top: 20px;
+    margin-bottom: -10px;
+    padding-left: 12px;
+    color: #999
+}
+
+.tt-menu {
+    width: 370px;
+    margin: 12px 0;
+    padding: 8px 0;
+    background-color: #fff;
+    text-align: left;
+    padding-top: -10px;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+    -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+}
+
+.tt-suggestion {
+    padding: 3px 20px;
+    font-size: 18px;
+    line-height: 24px;
+}
+
+.tt-suggestion:hover {
+    cursor: pointer;
+    color: #fff;
+    background-color: #0097cf;
+}
+
+.tt-suggestion.tt-cursor {
+    color: #fff;
+    background-color: #0097cf;
+}
+
+.tt-suggestion p {
+    margin: 0;
+}
+
+#srrTable {
+    word-break: break-all;
+    word-wrap: break-all
+}
+
+.tableLab {
+    font-weight: bold;
+    width: 120px;
+}
+
+.subcontainsearch {
+    margin-top: 10px;
+}
+
+#methodDetail {
+    font-size: 16px;
+    padding-left: 10px;
+    padding-top: 5px;
+}
+
+.flow {
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+
+
+/* .charttitle{
+  font-weight:  bold;
+  font-size: 120%;
+  color: rgba(65,105,225,0.8);
+  margin-bottom: 3px;
+} */
+
+.charthead {
+    margin-bottom: 10px;
+}
+
+.searchGenediv {
+    margin-bottom: 7px;
+    margin-top: 7px;
+    position: relative;
+}
+
+.loading {
+    width: 80px;
+    height: 40px;
+    margin: 0 auto;
+    /* margin-top:100px; */
+}
+
+.loading span {
+    display: inline-block;
+    width: 8px;
+    height: 50px;
+    border-radius: 4px;
+    background: lightgreen;
+    -webkit-animation: load 1s ease infinite;
+}
+
+@-webkit-keyframes load {
+    0%,
+    100% {
+        height: 40px;
+        background: lightgreen;
+    }
+    50% {
+        height: 70px;
+        margin: -15px 0;
+        background: lightblue;
+    }
+}
+
+.loading span:nth-child(2) {
+    -webkit-animation-delay: 0.2s;
+}
+
+.loading span:nth-child(3) {
+    -webkit-animation-delay: 0.4s;
+}
+
+.loading span:nth-child(4) {
+    -webkit-animation-delay: 0.6s;
+}
+
+.loading span:nth-child(5) {
+    -webkit-animation-delay: 0.8s;
+}
+
+.modal {
+    text-align: center;
+}
+
+#geneinfotable {
+    text-align: left;
+}
+
+
+/* .titleselects{
+  float: left;
+  margin-right: 10px;
+} */
+
+.exatext {
+    margin-right: 20px;
+}
+
+h5 {
+    font-weight: bold;
+    float: left;
+    margin-right: 5px;
+    font-size: 100%;
+    margin-top: 8px;
+}
+
+
+/* 
+.panel-heading{
+  font-weight: bold;
+  height: 50px;
+  font-size: 110%;
+} */
+
+.pinpanel {
+    font-size: 120%;
+    font-weight: bold;
+    color: #5D478B;
+}
+
+.dropdown-menu.inner {
+    max-height: 400px;
+}
+
+.rightselect {
+    float: right;
+    margin-top: 0px;
+    font-size: 90%
+}
+
+.panel {
+    position: relative;
+}
+
+.shade {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #000;
+    opacity: 0.5;
+    text-align: center;
+    margin: auto;
+    padding: 10% 0;
+    font-size: 400%;
+}
+
+#submitgernastrutext {
+    float: inline-end;
+    margin-top: 0px;
+}
+
+#structureinvitro {
+    width: 100%;
+}
+
+#structureinvivo {
+    width: 100%;
+}
+
+#jumbotron {
+    background-image: '/static/rsvdb/img/back2.png';
+}
+
+
+/* 
+#jumbotron{
+  position:relative;
+  overflow:hidden;
+  color:white!important;
+  text-align:center;
+  z-index:0;
+} */
+
+#zhezhao {
+    color: white;
+}
+
+#jumbotron {
+    background: url('https://taolab.atlasbioinfo.com/rsvdb%2Fimg%2Fback.jpg') repeat-x center;
+    height: 340px;
+    animation: animatedBackground 30s linear infinite alternate;
+    background-size: cover;
+}
+
+@keyframes animatedBackground {
+    from {
+        background-position: 0 0;
+    }
+    to {
+        background-position: 0 100%;
+    }
+}
+
+.strushowtd {
+    height: 300px;
+}
+
+.grid-item {
+    position: relative;
+    float: left;
+    width: 22%;
+    /* margin-top: 1px;
+   margin-bottom: 1px;
+  margin-left: 5px; */
+    margin: 1px;
+    padding: 5px;
+}
+
+.grid-item-width2 {
+    width: 32%;
+}
+
+.grid-item-height2 {
+    height: 200px;
+    /* background: rgba(249,205,173) */
+}
+
+.speImg {
+    display: block;
+    /* height: 80%; */
+    /* height: 150px; */
+    margin: 0;
+    border-radius: 5px;
+}
+
+.grid {
+    position: relative;
+    float: left;
+    width: 100%;
+}
+
+.grid-item:hover {
+    -moz-box-shadow: 4px 4px 10px #AAA;
+    -webkit-box-shadow: 4px 4px 10px #AAA;
+    box-shadow: 4px 4px 10px #AAA;
+}
+
+#filterbtngroup {
+    margin-bottom: 10px;
+}
+
+.filterfunction {
+    background-color: rgba(38, 188, 213, 0.1);
+}
+
+.filterspecies {
+    background-color: rgba(255, 245, 154, 0.2);
+}
+
+.mainlogo {
+    width: 100px;
+    display: inline-block;
+    margin-right: 17px;
+}
+
+#smlogo {
+    float: inline-start;
+    width: 120px;
+}
+
+#mainlogosize {
+    height: 120%;
+    float: left;
+    margin-right: 6px;
+}
+
+.sublogo {
+    margin-top: 50px;
+}
+
+.subp {
+    margin-top: 30px;
+}
+
+.smImg {
+    padding: 50px;
+}
+
+.smImgh {
+    padding: 70px;
+    margin: -23px;
+}
+
+
+/* ul.nav-tabs{
+  min-width: 100px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.067);
+}
+ul.nav-tabs li{
+  margin: 0;
+  border-top: 1px solid #ddd;
+}
+ul.nav-tabs li:first-child{
+  border-top: none;
+}
+ul.nav-tabs li a{
+  margin: 0;
+  padding: 8px 16px;
+  border-radius: 0;
+}
+ul.nav-tabs li.active a, ul.nav-tabs li.active a:hover{
+  color: #fff;
+  background: #0088cc;
+  border: 1px solid #0088cc;
+}
+ul.nav-tabs li:first-child a{
+  border-radius: 4px 4px 0 0;
+}
+ul.nav-tabs li:last-child a{
+  border-radius: 0 0 4px 4px;
+}
+
+#helpnavul{
+  display: inline-block;
+
+} */
+
+#usermanualpdf {
+    font-size: 240%;
+    font-weight: bold;
+}
+
+
+/* .list-group{
+  margin-bottom: 0px;
+} */
+
+.list-group-item {
+    border: 0px;
+    padding: 0px 15px;
+}
+
+.list-group-item.active>a {
+    font-weight: 700;
+    color: #5E9E70;
+    border-right: 2px solid #5E9E70;
+    background-color: transparent!important;
+}
+
+.list-group-item>a {
+    color: gray;
+    font-size: 14px;
+    /* font-weight: bold; */
+}
+
+.list-group-item.active {
+    background-color: transparent!important;
+}
+
+#helpnavdiv .nav .nav {
+    display: none;
+    font-size: 12px;
+}
+
+#helpnavdiv .nav>.active>ul {
+    display: block;
+}
+
+#helpnavdiv {
+    margin-left: 50px;
+}
+
+#nav-par-div .nav .nav {
+    display: none;
+    font-size: 12px;
+}
+
+#nav-par-div .nav>.active>ul {
+    display: block;
+}
+
+.loadEffect {
+    width: 100px;
+    height: 100px;
+    position: relative;
+    margin: 0 auto;
+    margin-top: -60px;
+    z-index: 10000;
+}
+
+.loadEffect span {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: lightgreen;
+    position: absolute;
+    -webkit-animation: load 1.04s ease infinite;
+}
+
+@-webkit-keyframes load {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.2;
+    }
+}
+
+.loadEffect span:nth-child(1) {
+    left: 0;
+    top: 50%;
+    margin-top: -8px;
+    -webkit-animation-delay: 0.13s;
+}
+
+.loadEffect span:nth-child(2) {
+    left: 14px;
+    top: 14px;
+    -webkit-animation-delay: 0.26s;
+}
+
+.loadEffect span:nth-child(3) {
+    left: 50%;
+    top: 0;
+    margin-left: -8px;
+    -webkit-animation-delay: 0.39s;
+}
+
+.loadEffect span:nth-child(4) {
+    top: 14px;
+    right: 14px;
+    -webkit-animation-delay: 0.52s;
+}
+
+.loadEffect span:nth-child(5) {
+    right: 0;
+    top: 50%;
+    margin-top: -8px;
+    -webkit-animation-delay: 0.65s;
+}
+
+.loadEffect span:nth-child(6) {
+    right: 14px;
+    bottom: 14px;
+    -webkit-animation-delay: 0.78s;
+}
+
+.loadEffect span:nth-child(7) {
+    bottom: 0;
+    left: 50%;
+    margin-left: -8px;
+    -webkit-animation-delay: 0.91s;
+}
+
+.loadEffect span:nth-child(8) {
+    bottom: 14px;
+    left: 14px;
+    -webkit-animation-delay: 1.04s;
+}
+
+#mainexample {
+    margin-top: 20px;
+    color: white;
+}
+
+#mainexample a {
+    color: #fdb933 !important;
+}
+
+.panel-dis {
+    border: #337ab7 dotted;
+    margin: 15px;
+}
+
+#doitbegin_Back2top {
+    display: block;
+    width: 64px;
+    height: 64px;
+    background: url(https://taolab.atlasbioinfo.com/rsvdb%2Fimg%2Fto-top.png) no-repeat;
+    position: fixed;
+    _position: absolute;
+    right: 20px;
+    bottom: 80px;
+    z-index: 10;
+    cursor: pointer;
+    text-indent: -999em;
+}
+
+#doitbegin_Back2top:hover {
+    background: url(https://taolab.atlasbioinfo.com/rsvdb%2Fimg%2Fto-top-hover.png) no-repeat;
+}

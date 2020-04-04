@@ -1,0 +1,543 @@
+{% extends 'rsvdb/base.html' %}
+
+{% block extendFile %}
+<style>
+    .loadingE {
+        width: 80px;
+        height: 40px;
+        margin: 0 auto
+    }
+    
+    .loadingE span {
+        display: inline-block;
+        width: 8px;
+        height: 50px;
+        border-radius: 4px;
+        margin-left: 10px;
+        background: #337ab7;
+        -webkit-animation: load 1s ease infinite
+    }
+    
+    @-webkit-keyframes load {
+        0%,
+        100% {
+            height: 40px;
+            background: #337ab7
+        }
+        50% {
+            height: 70px;
+            margin: -15px 0;
+            background: lightblue
+        }
+    }
+    
+    .loadingE span:nth-child(2) {
+        -webkit-animation-delay: 0.2s
+    }
+    
+    .loadingE span:nth-child(3) {
+        -webkit-animation-delay: 0.4s
+    }
+    
+    .loadingE span:nth-child(4) {
+        -webkit-animation-delay: 0.6s
+    }
+    
+    .loadingE span:nth-child(5) {
+        -webkit-animation-delay: 0.8s
+    }
+    
+    .shade {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background-color: #000;
+        opacity: 0.5;
+        text-align: center;
+        margin: auto;
+        padding: 35%;
+        font-size: 400%;
+        z-index: 9999999999999999999999999
+    }
+</style>
+
+<link href="{{ url_for('static',filename='rsvdb/css/bootstrap-table.min.css')}}" rel="stylesheet">
+<link href="{{ url_for('static',filename='rsvdb/css/bootstrap-select.min.css')}}" rel="stylesheet"> {% endblock %} {% block dataButt %}
+<li class="active"><a href="{{url_for('showDetail')}}">Browse</a></li>
+{% endblock %} {% block content %}
+
+<body data-spy="scroll" data-target="#side-bar-browse" id='innerbody'>
+    <div id="bodyshade" style="position: fixed;" class="loadingE shade"><span></span><span></span><span></span><span></span><span></span><span></span><span></span> Loading......
+    </div>
+
+    <div class="jumbotron homeIntroShow subintroshow" id="jumbotron">
+        <div class="sublogo" id="zhezhao">
+            <h1><img class='mainlogo' src="{{ url_for('static',filename='rsvdb/img/browse.png')}}">RNA Structure Browse</h1>
+            <p class="subp">Select the appropriate species and study to obtain information of mRNA structure.
+            </p>
+        </div>
+    </div>
+
+    <div class="row allthings container">
+        <div class="col-xs-3" id="side-bar-browse">
+            <div id="nav-par-div">
+                <ul class="nav list-group fixed" data-spy="affix" id="nav">
+                    <li>
+                        <h4 style="color:#5c7a29;font-weight: bold;">Navigation</h4>
+                    </li>
+                    <li class="list-group-item active"><a href="#spy-selection">1. Selection</a>
+                        <ul class="nav list-group">
+                            <li class="list-group-item list-sub-item"><a href="#spy-species">1.1 Species</a></li>
+                            <li class="list-group-item list-sub-item"><a href="#spy-studies">1.2 Studies</a></li>
+                        </ul>
+                    </li>
+                    <li class="list-group-item"><a href="#spy-studyinfo">2. Study info</a>
+                        <ul class="nav list-group">
+                            <li class="list-group-item list-sub-item"><a href="#spy-basicinfo">2.1 Basic info</a></li>
+
+                            <li class="list-group-item list-sub-item"><a href="#spy-sampleinfo">2.2 Sample info</a></li>
+                        </ul>
+                    </li>
+                    <li class="list-group-item"><a href="#spy-mapping">3. Mapping</a>
+                        <ul class="nav list-group">
+                            <li class="list-group-item list-sub-item"><a href="#spy-studystatistic">3.1 Study statistics</a></li>
+                            <li class="list-group-item list-sub-item"><a href="#spy-srrsstatistic">3.2 SRRs statistics</a></li>
+                            <li class="list-group-item list-sub-item"><a href="#spy-rpkmtop100">3.3 RPKM top 100</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="list-group-item"><a href="#spy-datamerge">4. Data merge</a>
+                        <ul class="nav list-group">
+                            <li class="list-group-item list-sub-item"><a href="#spy-samplecontained">4.1 Repeat merge</a></li>
+                            <li class="list-group-item list-sub-item"><a href="#spy-expstatistic">4.2 Experiments statistics</a></li>
+                            <li class="list-group-item list-sub-item"><a href="#rpkmstatichead">4.3 RPKM histogram</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="list-group-item"><a href="#spy-internor">5. Normalization</a>
+                        <ul class="nav list-group">
+                            <li class="list-group-item list-sub-item"><a href="#spy-internalpara">5.1 Internal parameters</a></li>
+                            <li class="list-group-item list-sub-item"><a href="#spy-ginicoefficient">5.2 Gini coefficient</a></li>
+                        </ul>
+                    </li>
+                    <li class="list-group-item"><a href="#spy-rnastructureinfo">6. RNA structure info</a>
+                        <ul class="nav list-group">
+                            <li class="list-group-item list-sub-item"><a href="#spy-datanorm">6.1 Data normalization</a></li>
+                            <li class="list-group-item list-sub-item"><a href="#spy-dmsact">6.2 DMS reactivity</a></li>
+                            <li class="list-group-item list-sub-item"><a href="#spy-dmsacthist">6.3 DMS histogram</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class='col-xs-9 infotabledetail' id="con-par-div" style="float: right;">
+            <div style="text-align: center;">
+                <div class="panel panel-default">
+                    <div class="panel-heading" style="text-align: center;">
+                        <h3 id="spy-selection">1. Selection</h3>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title" id="spy-species">1.1 Species</h3>
+                    </div>
+                    <div style="margin: 10px;">
+                        {% for sp in spes %} {% if sp==spin %}
+                        <button type="button" class="active btn btn-default spbutt">{{sp}}</button> {% else %}
+                        <button type="button" class="btn btn-default spbutt">{{sp}}</button> {% endif %} {% endfor %}
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title" id="spy-studies">1.2 Studies</h3>
+                    </div>
+                    <div id="geocontent" style="margin: 10px;">
+
+                    </div>
+                </div>
+            </div>
+            <!-- Study title -->
+            <div class="panel panel-success">
+                <div class="panel-heading" style="text-align: center;">
+                    <h3 id="spy-studyinfo">2. Study info</h3>
+                </div>
+            </div>
+            <!-- Basic info -->
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <h3 class="panel-title" id="spy-basicinfo">2.1 Basic info</h3>
+                </div>
+                <table class="table table-bordered table-hover">
+                    <tr>
+                        <td class="tableLab"><a>Title:</a></td>
+                        <td colspan="5" id="geotitle"></td>
+                    </tr>
+                    <tr>
+                        <td class="tableLab"><a>Reference:</a></td>
+                        <td colspan="5" id="georef"></td>
+                    </tr>
+                    <tr>
+                        <td class="tableLab"><a data-toggle="tooltip" data-placement="right" title="The species involved in the data.">Species:</a></td>
+                        <td id="geospe"></td>
+                        <td class="tableLab"><a data-toggle="tooltip" data-placement="right" title="Accession number of the Gene Expression Omnibus(GEO) database.">GEO:</a></td>
+                        <td id="geogeo"></td>
+                        <td class="tableLab"><a data-toggle="tooltip" data-placement="right" title="PubMed Unique Identifier(PMID)">PMID:</a></td>
+                        <td id="geopmid"></td>
+                    </tr>
+                    <tr style="height:50px">
+                        <td class="tableLab"><a data-toggle="tooltip" data-placement="right" title="Summary of this study experiment design, retrieved from GEO database.">Summary:</a>
+                        </td>
+                        <td colspan="5">
+                            <span id="firstAbs"></span>
+                            <span style="visibility: hidden;display: none;" id="otherAbs"> </span>
+                            <a onclick="showOthers()" id="labmore">[more...]</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tableLab"><a data-toggle="tooltip" data-placement="right" title="Public time of the data.">Public:</a></td>
+                        <td id="geopublicon"></td>
+                        <td class="tableLab"><a data-toggle="tooltip" data-placement="right" title="Public time of the data.">Bioproject:</a></td>
+                        <td id="geobiopro"></td>
+                        <td class="tableLab"><a data-toggle="tooltip" data-placement="right" title="Reference genome">Ref:</a></td>
+                        <td id="georefgenome"></td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- sample info -->
+            <div class="panel panel-success ">
+                <div class="panel-heading">
+                    <h3 class="panel-title" id="spy-sampleinfo">2.2 Sample info</h3>
+                </div>
+                <table class="table table-bordered table-hover" id="srrTable">
+                    <tr>
+                        <td colspan="6" id="titleselect"></td>
+                    </tr>
+                    <tr>
+                        <td class="tableLab"><a data-toggle="tooltip" data-placement="right" title="The list containing accession number of Sequence Read Archive database.">SRR
+                                list</a>
+                        </td>
+                        <td colspan="5" id="srrlist"></td>
+                    </tr>
+                    <tr>
+                        <td class="tableLab"><a data-toggle="tooltip" data-placement="right" title="Short name of each experiment samples. The original samples name was replaced by the abbreviation.">Label</a>
+                        </td>
+                        <td colspan="2" id="simsample"></td>
+                        <td class="tableLab"><a data-toggle="tooltip" data-placement="right" title="The complete sample name used in the study, obtained from GEO database.">Sample</a>
+                        </td>
+                        <td colspan="2" id="sample"></td>
+                    </tr>
+                    <tr>
+                        <td class="tableLab"><a data-toggle="tooltip" data-placement="right" title="Sequencer used.">Instrument:</a></td>
+                        <td colspan="2" id="srrinstru"></td>
+                        <td class="tableLab"><a data-toggle="tooltip" data-placement="right" title="Statistics of reads in the sample.">Runs:</a></td>
+                        <td colspan="2" id="srrruns"></td>
+                    </tr>
+                    <tr>
+                        <td class="tableLab"><a data-toggle="tooltip" data-placement="right" title="Construction protocol">Protocol:</a></td>
+                        <td colspan="5" id="protocal"></td>
+                    </tr>
+                </table>
+            </div>
+            <!-- Mapping title -->
+            <div class="panel panel-info">
+                <div class="panel-heading" style="text-align: center;">
+                    <h3 id="spy-mapping">3. Mapping</h3>
+                </div>
+            </div>
+            <!-- Study statistics -->
+            <div class="panel panel-info">
+                <div class="panel-heading charthead" id="spy-studystatistic"><a data-toggle="tooltip" data-placement="bottom" title="Average alignment rate and ATCG content of all samples in the study of transcriptome and genome.">3.1
+                        Study statistics</a></div>
+                <div class="panel-body panel-dis">
+                    We mapped the reads to the genome and transcriptome. "tMapped" and "tUnmapped" represent the Mapping statistics of the transcriptome, and "gmmapped" and "gUnmapped"
+                    represent the genome.
+                </div>
+                <div id="totalmap" style="width:100%;height:300px;">
+                </div>
+
+            </div>
+
+            <!-- SRRs statistics -->
+            <div class="panel panel-info">
+                <div class="panel-heading charthead" style="width:100%" id="spy-srrsstatistic">
+                    <a data-toggle="tooltip" data-placement="bottom" title="Mapping statistics of reads and comparison between different SRR">3.2 SRRs statistics</a>
+                </div>
+                <div class="panel-body panel-dis">
+                    We mapped the reads in SRR files to the genome and transcriptome, and calculated the Map ratio and the ATCG ratio. The ATCG ratio here is either the first base at the 5 'end of reads (for the RT-stop based sequencing) or the mutation sites identified
+                    (for the mutational profiling based sequencing).
+                    <strong>The sequence Map to the transcriptome is marked with <font color='red'>"t"</font
+                            color='red'>, such as "tMap";Maps to genomes are labeled with <font color='red'>"g"</font>,
+                        such as "gA."</strong>
+                </div>
+                <div id="srrstatic" style="position: relative; width:100%;height:350px"></div>
+                <div id="srrATCGstatic" style="position: relative; width:100%;height:350px"></div>
+            </div>
+            <!-- RPKM top 100 transcripts -->
+            <div class="panel panel-info">
+                <div class="panel-heading charthead" style="width:100%" id="spy-rpkmtop100">
+                    <a data-toggle="tooltip" data-placement="right" title="Information of top 100 transcripts ranked by RPKM">3.3 RPKM top 100 transcripts</a>
+                </div>
+                <div id="top100toolbar">
+                    <div id="srrselect" style="margin-left: 10px;"></div>
+                </div>
+                <table id="struInfoTable">
+                </table>
+            </div>
+            <!-- Mapping title -->
+            <div class="panel panel-info">
+                <div class="panel-heading" style="text-align: center;">
+                    <h3 id="spy-datamerge">4. Data merge</h3>
+                </div>
+            </div>
+            <!-- Repeat merge -->
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title" id="spy-samplecontained">4.1 Repeat merge</h3>
+                </div>
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <td class="tableLab" colspan="2"><a data-toggle="tooltip" data-placement="right" title="The list containing accession number of Sequence Read Archive database.">SRR
+                                    list</a>
+                            </td>
+                            <td class="tableLab" colspan="2"><a data-toggle="tooltip" data-placement="right" title="The complete experiment name used in the study, obtained from GEO database.">Experiments</a>
+                            </td>
+                            <td class="tableLab" colspan="2"><a data-toggle="tooltip" data-placement="right" title="Short name of experiment. The repetitions of the experiments were combined and the original samples name was replaced by the abbreviation.">Label</a>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody id="samples_table">
+
+                    </tbody>
+                </table>
+            </div>
+            <!-- Experiments statistics -->
+            <div class="panel panel-info">
+                <div class="panel-heading charthead" style="width:100%" id="spy-expstatistic">4.2 Experiments statistics</a>
+                </div>
+                <div class="panel-body panel-dis">
+                    We mapped the reads in SRR files to the genome and transcriptome, and calculated the Map ratio and the ATCG ratio. The ATCG ratio here is either the first base at the 5 'end of reads (for the RT-stop based sequencing) or the mutation sites identified
+                    (for the mutational profiling based sequencing).
+                    <strong>The sequence Map to the transcriptome is marked with <font color='red'>"t"</font
+                        color='red'>, such as "tMap";Maps to genomes are labeled with <font color='red'>"g"</font>,
+                    such as "gA."</strong>
+                </div>
+                <div id="expstatic" style="position: relative; width:100%;height:350px"></div>
+                <div id="expATCGstatic" style="position: relative; width:100%;height:350px"></div>
+            </div>
+            <!--  4.3 RPKM histogram -->
+            <div class="panel panel-primary">
+                <div class="panel-heading" id="rpkmstatichead" style="width:100%">
+                    4.3 RPKM histogram
+                </div>
+                <div class="panel-body panel-dis">
+                    We calculated the RPKM values for each transcript of samples and plotted the histogram.
+                    <br />You can stack, tiled, data display, and download images by clicking the buttons on the right, and you can zoom the plot directly by using the mouse wheel or by dragging horizontal and vertical stripes.
+                    <br /><strong>The x-axis is the logarithmic axis (log10).</strong>
+                </div>
+                <div id="rpkmstatic" style="position: relative; width:100%;height:350px">
+                </div>
+                <div id="rpkmshade" class="loading shade">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span> Loading...
+                </div>
+            </div>
+            <!-- 5. Normalization -->
+            <div class="panel panel-primary">
+                <div class="panel-primary" style="text-align: center;">
+                    <h3 id="spy-internor">5. Normalization </h3>
+                </div>
+            </div>
+            <!-- 5.1 Internal parameters -->
+            <div class="panel panel-primary">
+                <div class="panel-heading charthead" id="#spy-internalpara">5.1 Internal reference gene</div>
+                <div class="panel-body panel-dis">
+                    In order for the samples to be comparable, an internal reference needs to be adopt for normalization. DMS signals of rRNA, tRNA, or housekeeping genes are usually selected as internal reference gene.
+                    <br />We calculated the correlation coefficients of rRNA, tRNA and housekeeping genes in different samples, and selected the one with the highest correlation coefficient as the internal reference gene.
+                </div>
+                <table class="table table-bordered table-hover" id="srrTable">
+                    <tr>
+                        <td class="tableLab" style="text-align: center;" colspan="6"><a data-toggle="tooltip" data-placement="bottom" title="The following table shows the details of the internal parameters.The correlation coefficients of internal parameters between different samples are shown in PDF.">Internal reference info</a></td>
+                    </tr>
+                    <tr>
+                        <td class="tableLab"><a data-toggle="tooltip" data-placement="right" title="Transcript name.">Transcript</a>
+                        </td>
+                        <td id="interref_transname"></td>
+                        <td class="tableLab"><a data-toggle="tooltip" data-placement="right" title="Mean pearson correlation coefficient between samples">R</a>
+                        </td>
+                        <td id="interref_cor"></td>
+                        <td class="tableLab"><a data-toggle="tooltip" data-placement="right" title="General name.">Name</a>
+                        </td>
+                        <td id="interref_name"></td>
+                    </tr>
+                    <tr>
+                        <td class="tableLab"><a data-toggle="tooltip" data-placement="right" title="A description of the transcript or gene in a database.">Description</a>
+                        </td>
+                        <td colspan="5" id="interref_dis"></td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- 5.2 Boxplot of Gini coefficient -->
+            <div class="panel panel-primary">
+                <div class="panel-heading" id="spy-ginicoefficient">
+                    5.2 Boxplot of Gini coefficient
+                </div>
+                <div class="panel-body panel-dis">
+                    We calculated the Gini coefficients of the AC site of the UTR region and the CDS region on each transcript and drew box diagrams. The Gini coefficient of the DMS signal can to some extent, measure the strength of the RNA structure, but the coverage and
+                    depth of sequencing would affect it.
+                    <br /><strong style="color: red;">The threshold filters coverage of the DMS signal from 0% (which means no filtering) to 90% (coverage needs to be greater than 90%).</strong> If UTR annotation information of the transcripts is missing
+                    or the DMS signal of the transcripts is extremely low were removed from the box diagram.
+
+                </div>
+                <h5 style="margin-left: 10px;">Threshold:</h5>
+                <select class="selectpicker" id="giniboxall">
+                <option>90%</option>
+                <option>80%</option>
+                <option>70%</option>                    
+                <option>60%</option>
+                <option>50%</option>
+                <option>40%</option>
+                <option>30%</option>
+                <option>20%</option>
+                <option>10%</option>
+                <option selected>0%</option>
+            </select></h5>
+                <div id="giniboxstatic" style="position: relative; width:100%;height:350px">
+                </div>
+                <div id="giniboxshade" class="loading shade">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span> Loading...
+                </div>
+            </div>
+            <!-- RNA structure info title -->
+            <div class="panel panel-default">
+                <div class="panel-heading" style="text-align: center;">
+                    <h3 id="spy-rnastructureinfo">6. RNA structure info</h3>
+                </div>
+            </div>
+            <!-- 6.1 Data normalization report -->
+            <div class="panel panel-default">
+                <div class="panel-heading charthead" id="spy-datanorm">6.1 Data normalization</div>
+                <div class="panel-body panel-dis">
+
+                    DMS-seq, structure-seq and CIRS-seq methods uses DMS modifications that detected by reading reverse transcription (RT) stop sites and these data collectively referred to as RT-stop datasets. DMS-MaPseq method uses reverse transcriptase mismatch instead
+                    of truncation products, referred to as mutation profiling (MaP) datasets. We normalized the two data sets in different methods.The RT-stop data sets adopts the method of Ding et al. 2014, and the MaP data set adopts the method of Zubradt
+                    et al. 2017.
+                    <br /><strong>For RT-stop data sets, RNA structure data usually need to be sequenced in the DMS treatment group (noted as "DMS+") and the control group (noted as "DMS-").The MaP dataset does not require a DMS control group.</strong>
+                </div>
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <td class="tableLab" colspan="2"><a data-toggle="tooltip" data-placement="right" title="The list containing accession number of Sequence Read Archive database.">Experiments</a>
+                            </td>
+                            <td class="tableLab" colspan="2"><a data-toggle="tooltip" data-placement="right" title="Short name of experiment. The repetitions of the experiments were combined and the original samples name was replaced by the abbreviation.">Label</a>
+                            </td>
+                            <td class="tableLab" colspan="2"><a data-toggle="tooltip" data-placement="right" title="Label after merged DMS+ and DMS- samples (For RT-stop data sets).">Merged after normalized</a>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody id="lastnorm_tablebody">
+
+                    </tbody>
+                </table>
+            </div>
+            <!-- 6.2 DMS reactivity top 100 -->
+            <div class="panel panel-info">
+                <div class="panel-heading charthead" style="width:100%" id="spy-dmsact">
+                    <a data-toggle="tooltip" data-placement="right" title="Information of top 100 transcripts ranked by RPKM">6.2 DMS reactivity top 100</a>
+                </div>
+                <div class="panel-body panel-dis">
+                    The DMS reactivity data is eventually obtained through mapping, internal parameter normalization, and further normalization. We show the genes and related data of DMS reactivity top100 in each sample. If there are less than 100 gene with valuable DMS
+                    reactivity data, all data are displayed.
+                </div>
+                <div id="top100toolbar2">
+                    <div id="hebingnameselectdiv" style="margin-left: 10px;"></div>
+                </div>
+                <table id="struInfoTable2">
+                </table>
+            </div>
+            <!--  6.3 RPKM histogram -->
+            <div class="panel panel-primary">
+                <div class="panel-heading" id="rpkmstatichead" style="width:100%">
+                    6.3 DMS reactivity histogram
+                </div>
+                <div class="panel-body panel-dis">
+                    We calculated the RPKM values for each transcript of samples and plotted the histogram.
+                    <br />You can stack, tiled, data display, and download images by clicking the buttons on the right, and you can zoom the plot directly by using the mouse wheel or by dragging horizontal and vertical stripes.
+                    <br /><strong>The x-axis is the logarithmic axis (log10).</strong>
+                </div>
+                <div id="dmsactstatic" style="position: relative; width:100%;height:350px">
+                </div>
+                <div id="dmsactshade" class="loading shade">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span> Loading...
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+</body>
+{% endblock %} 
+
+{% block footjs %}
+
+<script src="{{ url_for('static',filename='rsvdb/js/bootstrap-table.min.js')}}"></script>
+<script src="{{ url_for('static',filename='rsvdb/js/bootstrap-table-export.js')}}" type="text/javascript"></script>
+<script src="{{ url_for('static',filename='rsvdb/js/tableexport.min.js')}}"></script>
+<script src="{{ url_for('static',filename='rsvdb/js/back2top.js')}}"></script>
+<script src="{{ url_for('static',filename='rsvdb/js/echarts.min.js')}}" type="text/javascript"></script>
+<script src="{{ url_for('static',filename='rsvdb/js/bootstrap-select.min.js')}}"></script>
+<script src="{{ url_for('static',filename='rsvdb/js/plot.min.js')}}"></script>
+<script src="{{ url_for('static',filename='rsvdb/js/ajax.js')}}"></script>
+<script src="{{ url_for('static',filename='rsvdb/js/browseInitial.js')}}"></script>
+<script>
+    showStudies("{{spin}}");
+    $(".spbutt").bind("click", function() {
+        $(".spbutt").removeClass("active");
+        showStudies($(this).text());
+        $(this).addClass("active");
+    }); 
+    {% if (geo != "DEF") and(not(geo is none)) %}
+        $('.geobutt').removeClass("active");
+        $('.geobutt:contains("{{geo}}")').addClass("active"); 
+    {% endif %}
+
+    $('#nav').affix({
+        offset: {
+            top: $('#nav').offset().top,
+            bottom: $('footer').outerHeight(true) + $('.application').outerHeight(true) + 40
+        }
+    });
+    $("#giniboxall").selectpicker('refresh');
+    $("#giniboxall").on('changed.bs.select', function(e) {
+        let spe = $("#geospe").text();
+        let geo = $("#geogeo").text();
+        getGiniBox(spe, geo, spe, e.currentTarget.value);
+    });
+    // function sleep(delay) {
+    //   var start = (new Date()).getTime();
+    //   while ((new Date()).getTime() - start < delay) {
+    //     continue;
+    //   }
+    // }
+    console.log("RSVdb-Browse is" + document.readyState);
+    window.onload = function() {
+        $("#bodyshade").hide();
+    }
+</script>
+
+{% endblock %}

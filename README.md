@@ -2,7 +2,7 @@
 
 ![figure1](./1.png)
 
-RSVdb focuses on the research and experimental data related to the mRNA structure in vivo. It includes all the studies of the in vivo mRNA structure labeled by DMS reagent since the first proposed DMS-profiling method in 2014 (Rouskin et al. 2014; Ding et al. 2014). Our database including 622,429 RNAs from 178 samples of 10 studies in 8 species, displays the statistical presentation of mapping data, even predict and visualize mRNA structure in silico and in vivo. The project is supported by the National Natural Science Foundation of China (Grant 31771474). Servers and network services are provided by the Network & Education Technology Center of NWAFU.
+RNA fulfills a crucial regulatory role in cells by folding into a complex RNA structure. To date, a chemical compound, dimethyl sulfate (DMS), has been developed to effectively probe the RNA structure at the transcriptome level. We proposed a database, RSVdb (https://taolab.nwafu.edu.cn/rsvdb/), for the browsing and visualization of transcriptome RNA structures. RSVdb, including 626,225 RNAs with validated DMS reactivity from 178 samples in 8 species, supports four main functions: information retrieval, research overview, structure prediction, and resource download. Users can search for species, studies, transcripts and genes of interest; browse the quality control of sequencing data and statistical charts of RNA structure information; preview and perform online prediction of RNA structures in silico and under DMS restraint of different experimental treatments; and download RNA structure data for species and studies. Together, RSVdb provides a reference for RNA structure and will support future research on the function of RNA structure at the transcriptome level.
 
 Main site please visit https://taolab.nwsuaf.edu.cn/rsvdb/
 
@@ -13,19 +13,13 @@ The repository contains the source code for the front and back ends of RSVdb. Th
 
 ## Installation
 
-You need to install the following software:
->* Python 3.7
->* pipenv
->* RNAstructure (Linux Text Command Version)
-
-Once you have these conditions, download the entire file and execute the following command.
+You need to install python3 and run the following command:
 
 >1. cd RSVdb
->2. pipenv install
->3. pipenv shell
->4. flask run
+>2. pip install flask flask-blueprint flask-sqlalchemy
+>3. flask run
 
-You can then visit RSVdb via http://127.0.0.1:5000/.
+Then, you can then visit RSVdb via http://127.0.0.1:5000/.
 
-The repository contains the main functions of RSVdb, including data browsing and structure prediction. If you need to use 'viewer' functionality, please install RNAstructure (http://rna.urmc.rochester.edu/RNAstructure.html), where structural prediction relies heavily on Fold software.
+The repository contains the main functions of RSVdb, including data browsing and viewer. Only the main features of the site and sample transcripts are included here. Need more features, please visit "https://taolab.nwsuaf.edu.cn/rsvdb/".
 

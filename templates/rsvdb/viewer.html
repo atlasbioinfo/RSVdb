@@ -1,0 +1,337 @@
+{% extends 'rsvdb/base.html' %} {% block extendFile %}
+<style>
+    .loadingE {
+        width: 80px;
+        height: 40px;
+        margin: 0 auto
+    }
+    
+    .loadingE span {
+        display: inline-block;
+        width: 8px;
+        height: 50px;
+        border-radius: 4px;
+        margin-left: 10px;
+        background: #337ab7;
+        -webkit-animation: load 1s ease infinite
+    }
+    
+    @-webkit-keyframes load {
+        0%,
+        100% {
+            height: 40px;
+            background: #337ab7
+        }
+        50% {
+            height: 70px;
+            margin: -15px 0;
+            background: lightblue
+        }
+    }
+    
+    .loadingE span:nth-child(2) {
+        -webkit-animation-delay: 0.2s
+    }
+    
+    .loadingE span:nth-child(3) {
+        -webkit-animation-delay: 0.4s
+    }
+    
+    .loadingE span:nth-child(4) {
+        -webkit-animation-delay: 0.6s
+    }
+    
+    .loadingE span:nth-child(5) {
+        -webkit-animation-delay: 0.8s
+    }
+    
+    .shadeLoading {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background-color: #000;
+        opacity: 0.5;
+        text-align: center;
+        margin: auto;
+        padding: 35%;
+        font-size: 400%;
+        z-index: 9999999999999999999999999
+    }
+</style>
+<link href="{{ url_for('static',filename='rsvdb/css/bootstrap-table.min.css')}}" rel="stylesheet">
+<link href="{{ url_for('static',filename='rsvdb/css/fornac.css')}}" rel="stylesheet">
+<link href="{{ url_for('static',filename='rsvdb/css/bootstrap-select.min.css')}}" rel="stylesheet"> {% endblock %} {% block struButt %}
+<li class="active"><a href="{{url_for('showStruViewer')}}">Viewer</a></li>
+{% endblock %} {% block content %}
+
+<body data-spy="scroll" data-target="#side-bar-viewer" id='innerbody'>
+    <div id="bodyshade" style="position: fixed;" class="loadingE shadeLoading"><span></span><span></span><span></span><span></span><span></span><span></span><span></span> Loading......
+    </div>
+
+    <div class="jumbotron homeIntroShow subintroshow" id="jumbotron">
+        <div class="sublogo" id="zhezhao">
+            <h1><img class='mainlogo' src="{{ url_for('static',filename='rsvdb/img/viewer.png')}}">RNA Structure Viewer</h1>
+            <p class="subp">Select the appropriate research, search for the transcripts you are interested in and predict the RNA structure of subsequence.</p>
+        </div>
+    </div>
+
+    <div class="row allthings container">
+        <div class="col-xs-3" id="side-bar-viewer">
+            <div id="nav-par-div">
+                <ul class="nav list-group fixed" data-spy="affix" id="nav">
+                    <li>
+                        <h4 style="color:#5c7a29;font-weight: bold;">Navigation</h4>
+                    </li>
+                    <li class="list-group-item active"><a href="#spy-selection">1. Selection</a>
+                        <ul class="nav list-group">
+                            <li class="list-group-item list-sub-item"><a href="#spy-species">1.1 Species</a></li>
+                            <li class="list-group-item list-sub-item"><a href="#spy-studies">1.2 Studies</a></li>
+                        </ul>
+                    </li>
+                    <li class="list-group-item"><a href="#spy-rnasearch">2. Search</a></li>
+                    <li class="list-group-item"><a href="#spy-geneinfo">3. Gene info</a></li>
+                    <li class="list-group-item"><a href="#spy-dmssignalviewer">4. DMS reactivity viewer</a></li>
+                    <li class="list-group-item"><a href="#spy-rnastructuresetting">5. Prediction settings</a></li>
+                    <li class="list-group-item"><a href="#spy-rnastructureviewer">6. RNA structure prediction</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class='col-xs-9 infotabledetail' id="con-par-div" style="float: right;">
+            <div class="alert alert-danger alert-dismissible" role="alert" id="warnnogenediv" style="display: none">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                    aria-hidden="true">&times;</span></button>
+                <strong>Oh!</strong> <span id="warnTextgene"></span> Please re-select the study and re-search the transcripts ID or gene name.
+            </div>
+            <div style="text-align: center;">
+                <div class="panel panel-default">
+                    <div class="panel-heading" style="text-align: center;">
+                        <h3 id="spy-selection">1. Selection</h3>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title" id="spy-species">1.1 Species</h3>
+                    </div>
+                    <div style="margin: 10px;">
+                        {% for sp in spes %} {% if sp==spin %}
+                        <button type="button" class="active btn btn-default spbutt">{{sp}}</button> {% else %}
+                        <button type="button" class="btn btn-default spbutt">{{sp}}</button> {% endif %} {% endfor %}
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title" id="spy-studies">1.2 Studies</h3>
+                    </div>
+                    <div id="geocontent" style="margin: 10px;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search Scope -->
+            <div class="panel panel-default" style="text-align:center">
+                <div class="panel-heading" id="spy-rnasearch"> 2. Search</div>
+
+                <table class="table table-bordered table-hover">
+                    <div class="panel-body panel-dis">
+                        <strong style="color: red;">This version contains only several transcripts for the example. If you want to query all the transcript, please visit "https://taolab.nwafu.edu.cn/rsvdb/viewer/"</strong>
+                    </div>
+                    <tr>
+                        <td class="tableLab"><a data-toggle="tooltip" data-placement="right" title="GEO link of the study">Study</a></td>
+                        <td id="sstudyname"></td>
+                        <td class="tableLab"><a data-toggle="tooltip" data-placement="right" title="Species involved in the study you selected.">Species:</a></td>
+                        <td id="sspename">{{spe}}</td>
+                        <td class="tableLab"><a data-toggle="tooltip" data-placement="right" title="PubMed Unique Identifier">PMID:</a></td>
+                        <td id="spubmid"></td>
+                    </tr>
+                    <tr>
+                        <td class="tableLab"><a data-toggle="tooltip" data-placement="right" title="Name of the study">Title:</a></td>
+                        <td colspan="5" id="stitle"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" style="color: red;font-size: 30px; font-weight: bold;">
+                            <div id="inputgeneexample"></div>
+                        </td>
+                    </tr>
+
+                </table>
+
+                <div id="viewersearchshade" class="loading shade">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span> Loading...
+                    </br>
+                    <small>The first retrieval may take around 15s</br>please be patient....</small>
+                </div>
+            </div>
+
+            <!-- Gene info -->
+            <div class="panel panel-default" style="text-align:center">
+                <div class="panel-heading" id="spy-geneinfo">
+                    <a data-toggle="tooltip" data-placement="right" title="Basic information of the transcript or gene you searched.">3. Gene Info</a>
+                </div>
+                <table class="table table-bordered table-hover" id="geneinfotable">
+                    <tr>
+                        <td class="tableLab"><a>Transcript ID</a></td>
+                        <td id="geneid"></td>
+                        <td class="tableLab"><a>Gene name</a></td>
+                        <td id="genename"></td>
+                        <td class="tableLab"><a data-toggle="tooltip" data-placement="right" title="The gene you searched lies in this chromosome">Chromosome</a></td>
+                        <td id="chromosome"></td>
+                    </tr>
+                    <tr>
+                        <td class="tableLab"><a data-toggle="tooltip" data-placement="right" title="GC content of the gene you searched.">GC content</a></td>
+                        <td id="gc"></td>
+                        <td class="tableLab"><a data-toggle="tooltip" data-placement="right" title="Gene type of the gene you searched.">Gene type</a></td>
+                        <td colspan="3" id="genetype"></td>
+                    </tr>
+                    <tr>
+                        <td class="tableLab"><a data-toggle="tooltip" data-placement="right" title="Basic description of the gene you searched">Description</a></td>
+                        <td colspan="5" id="description"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="tableLab"><a data-toggle="tooltip" data-placement="right" title="Sample label list of the gene you searched">Sample</a></td>
+                        <td colspan="3" class="tableLab"><a data-toggle="tooltip" data-placement="right" title="Average DMS signal of the gene.">DMS reactivity</a></td>
+                    </tr>
+                    <div id="viewertableshade" class="loading shade">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span> Loading...
+                        </br>
+                        <small>The first retrieval may take around 15s, </br>please be patient....</small>
+                    </div>
+                    <tbody id="rpkmtable">
+
+                    </tbody>
+                </table>
+
+            </div>
+            <!-- DMS activity bar plot -->
+            <div class="panel panel-default" style="text-align:center" id="spy-dmssignalviewer">
+                <div class="panel-heading"><a data-toggle="tooltip" data-placement="bottom" title="Visualization of RNA structure. We predict the RNA structure both in silico and in DMS restriction by 'Fold' of the RNAstructure software package and the visualization of ViennaRNA's fornac.">4. DMS reactivity viewer</a></div>
+                <div class="panel-body panel-dis">
+                    The bar plot below shows the DMS reactivity of the gene you searched in different samples of the corresponding study. This value is obtained by Mapping, internal parameter normalization or DMS+ and DMS- normalization for RT-stop data set.
+                    <strong></strong>
+                </div>
+                <div id="dmsplotpanel" style="width:100%;position: relative;height:400px;">
+                    <div id="dmsplot" style="width: 100%;height:100%;"></div>
+                </div>
+                <span id="selectregioninfo"></span>
+                <div id="viewerdmsplotshade" class="loading shade">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span> Loading...
+                </div>
+            </div>
+            <div class="panel panel-default" style="text-align:center">
+                <div class="panel-heading" id="spy-rnastructuresetting">5. RNA structure prediction settings</div>
+                <div class="panel-body panel-dis">
+                    <strong style="color: red;">RNA structure prediction requires configuration of server-side programs and is not included in this release. <br />
+                        RNA structure prediction, please visit "https://taolab.nwsuaf.edu.cn/rsvdb/viewer/".
+                    </strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+{% endblock %} {% block footjs %}
+<script src="{{ url_for('static',filename='rsvdb/js/echarts.min.js')}}" type="text/javascript"></script>
+<script src="{{ url_for('static',filename='rsvdb/js/bootstrap-table.min.js')}}"></script>
+<script src="{{ url_for('static',filename='rsvdb/js/bootstrap-table-export.js')}}" type="text/javascript"></script>
+<script src="{{ url_for('static',filename='rsvdb/js/tableexport.min.js')}}"></script>
+<script src="{{ url_for('static',filename='rsvdb/js/back2top.js')}}"></script>
+<script src="{{ url_for('static',filename='rsvdb/js/bootstrap3-typeahead.min.js')}}" type="text/javascript"></script>
+<script src="{{ url_for('static',filename='rsvdb/js/fornac.js')}}"></script>
+<script src="{{ url_for('static',filename='rsvdb/js/bootstrap-select.min.js')}}"></script>
+<script src="{{ url_for('static',filename='rsvdb/js/saveSvgAsPng.js')}}"></script>
+<script src="{{ url_for('static',filename='rsvdb/js/viewer.js')}}"></script>
+<script>
+    $(".spbutt").bind("click", function() {
+        $(".spbutt").removeClass("active");
+        showStudies($(this).text());
+        $(this).addClass("active");
+    }); 
+    {% if (geo != "DEF") and(not(geo is none)) %}
+    $('.geobutt').removeClass("active");
+    $('.geobutt:contains("{{geo}}")').addClass("active"); 
+    {% endif %}
+
+    $('#nav').affix({
+        offset: {
+            top: $('#nav').offset().top,
+            bottom: $('footer').outerHeight(true) + $('.application').outerHeight(true) + 40
+        }
+    });
+
+    $("#searchGene").typeahead({
+        source: function(query, process) {
+            let geo = $("#sstudyname").text();
+            let spe = $("#sspename").text();
+            $.post("{{url_for('showStruViewer')}}", {
+                "med": "searchGene",
+                "geo": geo,
+                "spe": spe,
+                "label": query
+            }, function(data) {
+                return process(data.ajlist);
+            });
+        },
+        afterSelect: function(item) {
+            let geo = $("#sstudyname").text();
+            getDMSdata(geo, item);
+        },
+        fitToElement: true,
+    });
+
+    $("#searchGene").keypress(function(e) {
+        if (e.which == 13) {
+            let exp = $("#searchGene").val();
+            let geo = $("#sstudyname").text();
+            if (exp) {
+                getDMSdata(geo, exp);
+            }
+        }
+    });
+    $("#subdmsbeg").keypress(function(e) {
+        if (e.which == 13) {
+            changeZoonRegion($("#subdmsbeg").val(), $("#subdmsend").val());
+        }
+    });
+    $("#subdmsend").keypress(function(e) {
+        if (e.which == 13) {
+            changeZoonRegion($("#subdmsbeg").val(), $("#subdmsend").val());
+        }
+    });
+    window.onload = function() {
+        $('.spbutt:contains("{{spe}}")').addClass("active");
+        showStudies("{{spe}}", "{{geo}}")
+        $("#gernastruhead").hide();
+        $("#warnnogenediv").hide();
+        $("#viewersearchshade").hide();
+        $("#viewertableshade").hide();
+        $("#viewerdmsplotshade").hide();
+        $("#viewerstructureshade").hide();
+
+        $(function() {
+            $('[data-toggle="tooltip"]').tooltip()
+        });
+
+        let gname = "{{gene}}";
+        let geo = "{{geo}}";
+        if (gname) {
+            if (geo) {
+                getDMSdata(geo, gname);
+            }
+        }
+        console.log("RSVdb-viewer is" + document.readyState);
+        $("#bodyshade").hide();
+    }
+</script>
+{% endblock %}
