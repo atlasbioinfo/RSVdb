@@ -2,19 +2,6 @@
 
 ---
 
-### 20200814 Report
-
-I have just received a notice: 
-
-From today to **September 1**, the server, "taolab", may appear network fluctuation, this may cause users cannot access to the web site (https://taolab.nwsuaf.edu.cn/rsvdb/) periodically.
-
-The problem may not be fixed until **September 1, 2020**.
-
-We apologize for the trouble brought to you. Thank you for your understanding and support.
-
->
----
-
 ![figure1](./1.png)
 
 RNA fulfills a crucial regulatory role in cells by folding into a complex RNA structure. To date, a chemical compound, dimethyl sulfate (DMS), has been developed to effectively probe the RNA structure at the transcriptome level. We proposed a database, RSVdb (https://taolab.nwafu.edu.cn/rsvdb/), for the browsing and visualization of transcriptome RNA structures. RSVdb, including 626,225 RNAs with validated DMS reactivity from 178 samples in 8 species, supports four main functions: information retrieval, research overview, structure prediction, and resource download. Users can search for species, studies, transcripts and genes of interest; browse the quality control of sequencing data and statistical charts of RNA structure information; preview and perform online prediction of RNA structures in silico and under DMS restraint of different experimental treatments; and download RNA structure data for species and studies. Together, RSVdb provides a reference for RNA structure and will support future research on the function of RNA structure at the transcriptome level.
