@@ -5,7 +5,6 @@
 ```code
 I'm sorry that this database is currently unavailable due to force majeure.:(
 I have contacted the person in charge and hopefully it will be resolved.
-If not, I will take over this database again at a future time point to avoid conflicts.
 Thanks for your understanding...
 ```
 
